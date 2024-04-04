@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pharmacy POS</title>
+    <style>
+      * {
+        font-family: tahoma, Helvetica, sans-serif; /* tipo de letra de todo el ticket; */
+        font-size: 3mm !important;
+        line-height: 1 !important;
+      }
+ 
+      .info-tienda {
+        margin-top: 0;
+        margin-bottom:0mm;
+        line-height: 4mm;
+      }
+
+      .nro_boleta {
+        margin: 0;
+        font-size: 3mm !important;
+        text-align: right;
+      }
+
+       .customer {
+        margin: 0;
+        font-size: 3mm !important;
+        text-align: left;
+      }
+
+      .date {
+        margin: 0;
+        font-size: 2.5mm !important;
+        text-align: center;
+      }
+
+      .fecha_recepcion {
+        margin: 0;
+      }
+      .fecha_entrega {
+        line-height: 5mm;
+        margin: 0;
+      }
+
+      .nombre-cliente {
+        margin: 0mm;
+        margin-top: 0;
+        font-size: mm !important;
+      }
+
+      #thermal-pos {
+        box-shadow: 0 0 5mm #eee;
+        margin: 0 auto;
+        max-width: 79mm;
+        /* line-height: 6mm; */
+        padding: 3mm;
+      }
+
+      #thermal-pos h2 {
+        font-size: 2mm;
+        line-height: 13px;
+        font-weight: normal; /* Agrega esta línea para desactivar la negrita */
+      }
+      .label {
+        margin: 0;
+      }
+         .ticket {
+    text-align: center;
+   Padding-top: 0; /* Elimina el margen superior */
+   Padding-bottom: 0; /* Elimina el margen inferior */
+   Padding-right: 0;
+   Padding-left: 0;
+    
+
+    }
+       .fecharecep {
+    text-align: center;
+   Padding-top: 0; /* Elimina el margen superior */
+   Padding-bottom: 0; /* Elimina el margen inferior */
+   Padding-right: 0;
+   Padding-left: 0;
+    
+
+    }
+
+      #thermal-pos .label {
+        text-align: center;
+        font-size: 2mm;
+      }
+      #thermal-pos .line {
+        text-align: center;
+        line-height: 0;
+        font-size: 1mm;
+      }
+
+      #thermal-pos .detalles {
+        vertical-align: text-top;
+        max-width: 35mm;
+        word-wrap: break-word;
+      }
+
+      #thermal .listitem {
+        font-size: 2mm;
+        height: 5mm;
+      }
+
+      #thermal-pos table {
+        font-size: 2mm;
+        height: 5mm;
+        border-collapse: collapse;
+      }
+
+      #thermal-pos .item {
+        max-width: 30mm;
+        font-size: 2.1mm;
+        text-align: start;
+        word-wrap: break-word;
+        font-weight: normal; /* Agrega esta línea para desactivar la negrita */
+      }
+
+      #thermal-pos .cantidad {
+        text-align: right;
+      }
+
+      #thermal-pos .footer {
+        margin-top: 5mm;
+        text-align: center;
+        height: 60px;
+        page-break-after: auto;
+      }
+
+      .table {
+        width: 100%;
+        text-align: right;
+      }
+
+      .table-header {
+        text-align: right;
+        border-top: groove; /* Raya superior de encabezado de tabla de detalles; */
+        border-bottom: groove; /* Raya inferior de encabezado de tabla de detalles; */
+      }
+
+      .table-header h2 {
+        margin: 0;
+      }
+
+      .table-item {
+        vertical-align: top;
+      }
+      /* raya superior de SUBTOTAL; */
+      .top-line {
+        border-top: groove;
+      }
+
+      .pt-2 {
+        padding-top: 2mm;
+      }
+
+      .saldo-text {
+        margin: 0;
+        font-size: 15mm;
+        text-align: center;
+      } 
+
+      .table-footer {
+        vertical-align: bottom;
+        text-align: right;
+        font-size: 2mm;
+        line-height: 2mm;
+      }
+
+      .table-footer h2 {
+        margin: 0;
+        font-size: 2mm;
+      }
+
+      .estado-deuda {
+        font-size: 8mm !important;
+      }
+
+      .info {
+        font-size: 1.6mm;
+      }
+      .info p {
+        padding-bottom: 0;
+        margin-bottom: 0;
+      }
+      
+      .align-left {
+        text-align: left;
+     }
+      .m-0 {
+        margin: 0 !important;
+        text-align: left;
+      }
+
+      .policy {
+        font-size: 1.5mm;
+        line-height: 3.5mm;
+        padding: 3mm;
+        padding-top: 0;
+      }
+
+      .policy .policy-title {
+        text-align: center;
+        margin: 0;
+        font-weight: normal; /* Agrega esta línea para desactivar la negrita */
+        
+      }
+      
+      .align-right {
+            text-align: right;
+        }
+/* ---------------------------------------------------------------------------------------------- */
+
+.button-container {
+  display: flex;
+  justify-content: center; /* Centrar horizontalmente */
+}
+
+.button-box {
+  max-width: 300px; /* Ancho máximo del contenedor */
+  display: flex;
+  justify-content: space-between; /* Espacio entre las imágenes */
+}
+
+.button-box img {
+  max-width: 100%; /* Tamaño máximo de las imágenes */
+}
+
+/* Estilo para ocultar los botones en la versión impresa */
+@media print {
+  #whatsappButton,
+  #impresoraButton {
+    display: none;
+  }}
+
+
+/* CSS para ocultar las imágenes de WhatsAppButton cuando sharelink=1 está presente en la URL */
+img#whatsappButton {
+    display: none;
+}
+
+/* CSS para ocultar las imágenes de WhatsAppButton cuando sharelink=1 está presente en la URL */
+img#impresoraButton {
+    display: none;
+}
+
+/* ------------------------------------------------------------------------------------------------- */
+
+      
+    </style>
+ </head>
+ <body onload="printTicket()">
+
+ <!-- Codigo para que se imprima en automatico cuando se abra el ticket -->
+    <script>
+        // Obtener los parámetros de la URL
+        const params = new URLSearchParams(window.location.search);
+
+        // Obtener los valores de los parámetros
+        var invoice = params.has('invoice') ? params.get('invoice') : "---";
+        var date = params.has('date') ? params.get('date') : "dd/mm/aaaa";
+        var customer = params.has('customer') ? params.get('customer') : " ";
+        var phone = params.has('phone') ? params.get('phone') : " ";
+        var total = params.has('total') ? params.get('total') : "";
+        var sub_total = params.has('sub_total') ? params.get('sub_total') : " ";
+        var payment = params.has('payment') ? params.get('payment') : " ";
+        var balance = params.has('balance') ? params.get('balance') : " ";
+        var clinic = params.has('clinic') ? params.get('clinic') : " ";
+        var address = params.has('address') ? params.get('address') : " ";
+        var contact = params.has('contact') ? params.get('contact') : " ";
+        var text = params.has('text') ? params.get('text') : " ";
+        
+        //Recibe los datos de los servicios (separados por comas)
+        var qty = params.has('qty') ? params.get('qty') : "";
+        var items = params.has('items') ? params.get('items') : "";
+        var price = params.has('price') ? params.get('price') : "";
+        var sub_total = params.has('sub_total') ? params.get('sub_total') : "";
+        
+        //Formato de 2 decimales
+        //total = parseFloat(total).toLocaleString('es-ES', { minimumFractionDigits: 2 });
+        //sub_total = parseFloat(sub_total).toLocaleString('es-ES', { minimumFractionDigits: 2 });
+        //payment = parseFloat(payment).toLocaleString('es-ES', { minimumFractionDigits: 2 });
+        //balance = parseFloat(balance).toLocaleString('es-ES', { minimumFractionDigits: 2 });
+        
+        //crea una lista de cada columna a partir de las comas.
+        qty = qty.split(",");
+        items = items.split(",");
+        price = price.split(",");
+        sub_total = sub_total.split(",");
+
+        //Crea una lista para mostrar en cada fila de la tabla
+        var result = [];
+        
+        qty.forEach(function(value, id) {
+            result[id] = {
+                qty: qty[id],
+                items: items[id], 
+                price: price[id],
+                sub_total: sub_total[id],
+              
+            };
+        });
+    </script>
+    
+    
+     
+        
+        <div id="thermal-pos">
+        
+        <div class="label">
+            <p class="info-tienda">
+                <p id="clinic">
+                <br>
+               <p id="address">
+                <br>
+               <p id="contact">
+                <br>
+        </div>
+           <table class="table">
+ <tr>
+    <td style="text-align: left;">Invoice ID</td>
+    <td></td>
+    <td></td>
+    <td class="nro_boleta" id="invoice_id"></td>
+</tr>
+ <tr>
+    <td style="text-align: left;">Date</td>
+    <td></td>
+    <td></td>
+    <td class="nro_boleta" id="date"></td>
+</tr>
+ <tr>
+    <td style="text-align: left;">Customer</td>
+    <td class="customer" id="customer"></td>
+    <td class="nro_boleta" id="phone"></td>
+    <td></td>
+</tr>
+</table>
+          <br>
+        
+           <table class="table">
+            <tbody id="tablaBody">
+                <tr class="table-header">
+    <th><h2 style="text-align: left;">Qty</h2></th>
+    <th><h2 style="text-align: left;">Items</h2></th>
+    <th><h2>Price</h2></th>
+    <th><h2>Subtotal</h2></th> <!-- Nueva columna para Subtotal -->
+                 </tr>
+                <script>
+                    /*var result = [
+                        { cantidad: 3, descripcion: "Descripción 1", precio_unit: 10.50 },
+                        { cantidad: 5, descripcion: "Descripción 2", precio_unit: 20.00 },
+                        // ... otros objetos en el array
+                    ];*/
+
+                    var tablaBody = document.getElementById("tablaBody");
+
+                    result.forEach(function(row) {
+    var newRow = document.createElement("tr");
+    newRow.className = "table-item";
+
+    // Calcula el subtotal para el servicio actual
+    var subtotal = row.qty * parseFloat(row.price);
+    
+    newRow.innerHTML = `
+       <td class="item" style="text-align: left;">${row.qty}</td>
+        <td class="item" style="text-align: left;">${row.items}</td>
+        <td class="item" style="text-align: right;">${row.price}</td> <!-- Alinea a la derecha -->
+        <td class="item" style="text-align: right;">${subtotal}</td> <!-- Alinea a la derecha -->
+    `;
+
+    tablaBody.appendChild(newRow);
+});
+
+                document.querySelectorAll('.printbutton').forEach(function(element) {
+            element.addEventListener('click', function() {
+                /*print();*/
+            });
+        });
+        
+        /*MENSAJE DE WHATSAPP
+                    ];*/
+        
+    </script>
+                
+    <script>
+   
+
+       // Función para generar el enlace de WhatsApp
+        function sendWhatsAppMessage() {
+            // URL del archivo donde se encuentra insertado el botón
+            var currentURL = window.location.href;
+            
+            
+            // Mensaje a enviar junto con el enlace
+            var message = 'Hola!! somos de la lavandería, somos una lavandería que cuida el medio ambiente ♻️♻️♻️♻️♻️, por ello adjuntamos su ticket de atención  virtual. Click en el link para ver el ticket 👇🏻👇🏻👇🏻 ' + currentURL;
+            
+               // Código de país fijo
+            //var countryCode = '+51';
+            
+            
+            
+            // Construir el enlace de WhatsApp
+            var whatsappLink = 'https://api.whatsapp.com/send?phone=' + codigo_pais + telefono + '&text=' + encodeURIComponent(message)+'?sharelink=1';
+            
+            // Abrir una nueva ventana o pestaña para enviar el mensaje por WhatsApp
+            window.open(whatsappLink, '_blank');
+        }
+
+        // Asignar la función al evento click del botón
+        document.getElementById('whatsappButton').addEventListener('click', sendWhatsAppMessage);
+        
+          </script>
+        
+
+
+     
+         <script>
+    
+    // Función para imprimir el ticket
+function printTicket() {
+  window.print();
+}
+
+// Asignar la función al evento click del botón de impresión
+document.getElementById('impresoraButton').addEventListener('click', printTicket);
+     
+     
+        
+        
+    </script>
+    
+    
+
+                <tr class="table-footer top-line">
+                    <td class="" colspan="3">Total</td>
+                    <td colspan="3"><h2 id="total"></h2></td>
+                </tr>
+                <tr class="table-footer">
+                    <td class= ""colspan="3">Payment</td>
+                    <td colspan="3"><h2 id="payment"></h2></td>
+                    
+                </tr>
+                 <tr class="table-footer">
+                    <td class=""colspan="3">Balance</td>
+                    <td colspan="3"><h2 id="balance"></h2></td>
+                </tr> 
+            </tbody>
+        </table>
+        <br/>
+
+        <div class="policy">
+            <p class="policy-title">
+                <b>
+                    Good Sold are not exchangable</b>
+            
+            </p>
+            <br>
+              
+    </div>
+    <script>
+        var invoiceElement = document.getElementById("invoice_id").textContent = invoice;
+        var dateElement = document.getElementById("date").textContent = date;
+        var customer = document.getElementById("customer").textContent = customer;
+        var phone = document.getElementById("phone").textContent = phone;
+        var totalElement = document.getElementById("total").textContent = total;
+        var paymentElement = document.getElementById("payment").textContent = payment;
+        var balanceElement = document.getElementById("balance").textContent = balance;
+        var clinic = document.getElementById("clinic").textContent = clinic;
+        var address = document.getElementById("address").textContent = address;
+        var contact = document.getElementById("contact").textContent = contact;
+        var text = document.getElementById("text").textContent = text;
+        var sub_total = document.getElementById("sub_total").textContent = sub_total;
+
+
+      </script>   
+
+<script>
+// Obtén el botón de WhatsApp por su ID
+var whatsappButton = document.getElementById('whatsappButton');
+var impresoraButton = document.getElementById('impresoraButton');
+
+// Obtén la URL actual
+var currentURL = window.location.href;
+
+// Verifica si la URL contiene "sharelink=1" y oculta el botón si es así
+if (currentURL.indexOf('sharelink=1') !== -1) {
+    whatsappButton.style.display = 'none';
+    impresoraButton.style.display = 'none';
+}
+</script>
+
+<script>
+    function pprintTicket() {
+      // Simula hacer clic en el botón de impresión
+      document.getElementById("printButton").click();
+    }
+
+    
+
+  </script>
+
+</body>
+</html>
